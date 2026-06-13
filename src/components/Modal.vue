@@ -1,95 +1,77 @@
-<script setup>
-import WelcomeItem from './WelcomeItem.vue'
-import DocumentationIcon from './icons/IconDocumentation.vue'
-import ToolingIcon from './icons/IconTooling.vue'
-import EcosystemIcon from './icons/IconEcosystem.vue'
-import CommunityIcon from './icons/IconCommunity.vue'
-import SupportIcon from './icons/IconSupport.vue'
+<template>
+  <div v-if="show" class="modal-overlay" @click.self="emitClose">
+    <div class="modal-container">
+      <h2>🌾 Huerto El Alba · Agricultura Orgánica</h2>
+      <p>
+        🌿 <strong>Nuestra filosofía:</strong> Respeto por los ciclos naturales, abonos verdes,
+        policultivos y biodiversidad. ¡Únete a la revolución ecológica!
+      </p>
+      <p>
+        💧 Usamos riego eficiente, compost casero, rotación de cultivos y control biológico de
+        plagas.
+      </p>
+      <button @click="emitClose" class="modal-close">Cerrar</button>
+    </div>
+  </div>
+</template>
 
-const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
+<script setup>
+defineProps({
+  show: Boolean,
+})
+
+const emit = defineEmits(['close'])
+
+function emitClose() {
+  emit('close')
+}
 </script>
 
-<template>
-  <WelcomeItem>
-    <template #icon>
-      <DocumentationIcon />
-    </template>
-    <template #heading>Documentation</template>
+<style scoped>
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-    Vue’s
-    <a href="https://vuejs.org/" target="_blank" rel="noopener">official documentation</a>
-    provides you with all information you need to get started.
-  </WelcomeItem>
+.modal-container {
+  background: #feffea;
+  max-width: 450px;
+  width: 90%;
+  padding: 1.5rem;
+  border-radius: 2rem;
+  border-left: 12px solid #86bf6c;
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: fadeSlide 0.2s ease;
+}
 
-  <WelcomeItem>
-    <template #icon>
-      <ToolingIcon />
-    </template>
-    <template #heading>Tooling</template>
+.modal-container h2 {
+  margin-top: 0;
+  color: #2d6b2d;
+}
 
-    This project is served and bundled with
-    <a href="https://vite.dev/guide/features.html" target="_blank" rel="noopener">Vite</a>. The
-    recommended IDE setup is
-    <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VSCode</a>
-    +
-    <a href="https://github.com/vuejs/language-tools" target="_blank" rel="noopener"
-      >Vue - Official</a
-    >. If you need to test your components and web pages, check out
-    <a href="https://vitest.dev/" target="_blank" rel="noopener">Vitest</a>
-    and
-    <a href="https://www.cypress.io/" target="_blank" rel="noopener">Cypress</a>
-    /
-    <a href="https://playwright.dev/" target="_blank" rel="noopener">Playwright</a>.
+.modal-close {
+  margin-top: 1.2rem;
+  background: #6fbf4c;
+}
 
-    <br />
-
-    More instructions are available in
-    <a href="javascript:void(0)" @click="openReadmeInEditor"><code>README.md</code></a
-    >.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <EcosystemIcon />
-    </template>
-    <template #heading>Ecosystem</template>
-
-    Get official tools and libraries for your project:
-    <a href="https://pinia.vuejs.org/" target="_blank" rel="noopener">Pinia</a>,
-    <a href="https://router.vuejs.org/" target="_blank" rel="noopener">Vue Router</a>,
-    <a href="https://test-utils.vuejs.org/" target="_blank" rel="noopener">Vue Test Utils</a>, and
-    <a href="https://github.com/vuejs/devtools" target="_blank" rel="noopener">Vue Dev Tools</a>. If
-    you need more resources, we suggest paying
-    <a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">Awesome Vue</a>
-    a visit.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <CommunityIcon />
-    </template>
-    <template #heading>Community</template>
-
-    Got stuck? Ask your question on
-    <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Vue Land</a>
-    (our official Discord server), or
-    <a href="https://stackoverflow.com/questions/tagged/vue.js" target="_blank" rel="noopener"
-      >StackOverflow</a
-    >. You should also follow the official
-    <a href="https://bsky.app/profile/vuejs.org" target="_blank" rel="noopener">@vuejs.org</a>
-    Bluesky account or the
-    <a href="https://x.com/vuejs" target="_blank" rel="noopener">@vuejs</a>
-    X account for latest news in the Vue world.
-  </WelcomeItem>
-
-  <WelcomeItem>
-    <template #icon>
-      <SupportIcon />
-    </template>
-    <template #heading>Support Vue</template>
-
-    As an independent project, Vue relies on community backing for its sustainability. You can help
-    us by
-    <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.
-  </WelcomeItem>
-</template>
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
