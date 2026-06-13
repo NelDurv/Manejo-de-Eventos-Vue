@@ -43,7 +43,7 @@ function emitClose() {
 }
 
 .modal-container {
-  background: #feffea;
+  background: #ebffea;
   max-width: 450px;
   width: 90%;
   padding: 1.5rem;
@@ -62,6 +62,11 @@ function emitClose() {
 .modal-close {
   margin-top: 1.2rem;
   background: #6fbf4c;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 2rem;
+  cursor: pointer;
 }
 
 @keyframes fadeSlide {

@@ -25,33 +25,109 @@
       <div class="hint">💡 Atajo: <kbd>Ctrl</kbd> + <kbd>K</kbd> → enfocar búsqueda</div>
     </section>
 
-    <!-- Módulo 2: Tarjetas clicables con propagación y captura -->
+    <!-- Módulo 2: Tarjeta única (consejos orgánicos) con ancho 100% -->
     <section>
-      <h2>🌿 Consejos orgánicos (tarjetas)</h2>
-      <div class="tarjetas-grid">
-        <Tarjeta
-          v-for="card in cards"
-          :key="card.id"
-          :id="card.id"
-          :titulo="card.titulo"
-          :descripcion="card.descripcion"
-          @select="seleccionarTarjeta"
-          @favorite="marcarFavorito"
-        />
+      <h2>🌿 Consejo orgánico (eventos: captura, burbujeo, stop)</h2>
+      <!-- Contenedor con .capture para demostrar fase de captura -->
+      <div @click.capture="logCaptura" class="capture-wrapper">
+        <div class="tarjeta-unica">
+          <div class="tarjeta-con-feedback">
+            <Tarjeta
+              id="1"
+              titulo="🌱 Compost activo"
+              descripcion="Aporta nitrógeno y microorganismos benéficos."
+              gradient="linear-gradient(135deg, #e6f7e6, #b8e0b8)"
+              @select="seleccionarTarjeta"
+              @favorite="marcarFavorito"
+            />
+            <div class="event-feedback">
+              <span v-if="tarjetaEventMsg[1]"> 📢 {{ tarjetaEventMsg[1] }} </span>
+              <span v-else class="text-muted">
+                💡 Haz clic en la tarjeta o en "Favorito" para ver el evento
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
-      <!-- Contenedor con .capture para evidenciar fase de captura -->
-      <div
-        class="capture-info"
-        style="
-          font-size: 0.8rem;
-          margin-top: 1rem;
-          background: #eff5e9;
-          padding: 6px 12px;
-          border-radius: 2rem;
-        "
-      >
-        📡 El contenedor de tarjetas tiene <code>@click.capture</code> → verás "captura" en el
-        registro ANTES del click en tarjeta o favorito.
+      <div class="capture-info">
+        📡 El contenedor gris tiene <code>@click.capture</code> → verás "🔻 CAPTURA" en el registro
+        ANTES del click en tarjeta o favorito.
+      </div>
+    </section>
+
+    <!-- SECCIÓN: Demostración de etapas de eventos (7 modificadores) -->
+    <section>
+      <h2>🎭 Etapas de eventos – Demostración visual</h2>
+      <div class="demo-grid">
+        <!-- @click normal -->
+        <div class="demo-card">
+          <h3>🔘 @click normal</h3>
+          <button @click="demoClickNormal">Haz clic aquí</button>
+          <div class="demo-feedback">{{ demoFeedback.normal }}</div>
+          <small>El evento burbujea hacia el contenedor padre.</small>
+        </div>
+
+        <!-- @click.stop -->
+        <div class="demo-card">
+          <h3>🛑 @click.stop</h3>
+          <div @click="demoClickPadre">
+            <button @click.stop="demoClickStop">Haz clic aquí</button>
+          </div>
+          <div class="demo-feedback">{{ demoFeedback.stop }}</div>
+          <small>El evento NO burbujea (detenido con .stop).</small>
+        </div>
+
+        <!-- @click.capture -->
+        <div class="demo-card" @click.capture="demoCapture">
+          <h3>📡 @click.capture</h3>
+          <button @click="demoClickNormal">Haz clic aquí</button>
+          <div class="demo-feedback">{{ demoFeedback.capture }}</div>
+          <small>El evento se captura ANTES de llegar al botón.</small>
+        </div>
+
+        <!-- @click.once -->
+        <div class="demo-card">
+          <h3>✨ @click.once</h3>
+          <button @click.once="demoOnce">Solo funciona una vez</button>
+          <div class="demo-feedback">{{ demoFeedback.once }}</div>
+          <small>El manejador se ejecuta una sola vez.</small>
+        </div>
+
+        <!-- @click.prevent -->
+        <div class="demo-card">
+          <h3>🔗 @click.prevent</h3>
+          <a href="https://example.com" @click.prevent="demoPrevent">Enlace que no navega</a>
+          <div class="demo-feedback">{{ demoFeedback.prevent }}</div>
+          <small>Previene la navegación por defecto.</small>
+        </div>
+
+        <!-- @keyup.enter / @keydown.esc -->
+        <div class="demo-card">
+          <h3>⌨️ @keyup.enter + @keydown.esc</h3>
+          <input
+            type="text"
+            @keyup.enter="demoEnter"
+            @keydown.esc="demoEsc"
+            placeholder="Escribe y pulsa Enter o Esc"
+          />
+          <div class="demo-feedback">{{ demoFeedback.keyboard }}</div>
+          <small>Enter ejecuta búsqueda simulada, Esc limpia.</small>
+        </div>
+
+        <!-- @scroll.passive -->
+        <div class="demo-card">
+          <h3>📜 @scroll.passive</h3>
+          <div class="mini-scroll" @scroll.passive="demoScroll">
+            <div class="mini-content">
+              <p>Línea 1</p>
+              <p>Línea 2</p>
+              <p>Línea 3</p>
+              <p>Línea 4</p>
+            </div>
+          </div>
+          <div class="demo-feedback">{{ demoFeedback.scroll }}</div>
+          <small>Scroll pasivo (mejora rendimiento).</small>
+        </div>
       </div>
     </section>
 
@@ -65,10 +141,7 @@
       >
         {{ tipButtonText }}
       </button>
-      <p
-        v-if="tipMostrado"
-        style="margin-top: 0.5rem; background: #fff0cf; padding: 0.5rem; border-radius: 1rem"
-      >
+      <p v-if="tipMostrado" class="tip-message">
         🌟 Tip especial: ¡Usa estiércol de oveja maduro y rotación de cultivos para enriquecer tu
         suelo!
       </p>
@@ -112,62 +185,48 @@
       </div>
     </section>
 
-    <!-- Modal (componente) -->
+    <!-- Modal -->
     <Modal :show="modalVisible" @close="cerrarModal" />
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import Tarjeta from './components/Tarjeta.vue'
 import Modal from './components/Modal.vue'
 
 // --------------------- DATOS REACTIVOS ---------------------
 const searchTerm = ref('')
 const searchResultMsg = ref('')
-const cards = ref([
-  {
-    id: 1,
-    titulo: '🌱 Compost activo',
-    descripcion: 'Aporta nitrógeno y microorganismos benéficos.',
-  },
-  {
-    id: 2,
-    titulo: '🐞 Control biológico',
-    descripcion: 'Introduce crisopas y mariquitas en tu huerto.',
-  },
-  {
-    id: 3,
-    titulo: '🌾 Rotación de cultivos',
-    descripcion: 'Previene plagas y mejora la fertilidad.',
-  },
-  { id: 4, titulo: '🍂 Mulching orgánico', descripcion: 'Paja, hojas secas, retiene humedad.' },
-])
 
-// logs (registro de eventos)
+// Ya no necesitamos array de cards, solo una tarjeta fija.
+const tarjetaEventMsg = ref({})
 const logs = ref([])
 const MAX_LOGS = 30
-
-// Scroll
 const scrollContainer = ref(null)
 const scrollPosition = ref(0)
 let lastScrollLogTime = 0
-
-// Tips "única vez"
 const tipDisabled = ref(false)
 const tipMostrado = ref(false)
 const tipButtonText = ref('🌿 Mostrar tips')
-
-// Modal
 const modalVisible = ref(false)
-
-// Referencia input para Ctrl+K
 const searchInput = ref(null)
+
+// Demo feedback
+const demoFeedback = ref({
+  normal: '',
+  stop: '',
+  capture: '',
+  once: '',
+  prevent: '',
+  keyboard: '',
+  scroll: '',
+})
+let onceTriggered = false
 
 // --------------------- FUNCIONES DE LOG ---------------------
 function addLog(message) {
   logs.value = [message, ...logs.value].slice(0, MAX_LOGS)
-  // Auto-scroll al último log? opcional (solo UX)
   nextTick(() => {
     const logContainer = document.querySelector('.log-list')
     if (logContainer) logContainer.scrollTop = 0
@@ -193,7 +252,6 @@ function limpiarCampo() {
   addLog('limpiar: input reiniciado con ESC')
 }
 
-// Enfocar con Ctrl+K (combinación de teclas)
 function focusSearchInput() {
   if (searchInput.value) {
     searchInput.value.focus()
@@ -201,40 +259,50 @@ function focusSearchInput() {
   }
 }
 
-// --------------------- MÓDULO 2: TARJETAS (captura, burbujeo, stop) ---------------------
-// Captura en contenedor PADRE (App.vue) - usamos @click.capture en el div que envuelve las tarjetas
-// pero está aplicado sobre un div dentro de la sección. Lo pondremos en un contenedor extra.
-// Como el template ya tiene .tarjetas-grid, mejor agregamos un div contenedor con capture.
-// Rediseño rápido: agrego un div con @click.capture justo alrededor del grid.
-// Atraparemos el evento y extraeremos el id de la tarjeta más cercana.
+// --------------------- MÓDULO 2: TARJETA ÚNICA (captura, burbujeo, stop) ---------------------
 function logCaptura(event) {
-  // Intentar obtener la tarjeta clickeada (puede ser el botón favorito o la tarjeta misma)
   const targetEl = event.target
   const tarjetaDiv = targetEl.closest('.tarjeta-item')
   if (tarjetaDiv && tarjetaDiv.dataset.id) {
-    const id = tarjetaDiv.dataset.id
-    addLog(`🔻 CAPTURA (fase captura) - tarjeta ${id}`)
+    const id = parseInt(tarjetaDiv.dataset.id)
+    addLog(`🔻 CAPTURA (fase captura) - Tarjeta ${id} (antes del click en la tarjeta)`)
+    tarjetaEventMsg.value[id] = `🔻 Captura detectada (el evento pasó primero por el contenedor)`
+    setTimeout(() => {
+      if (tarjetaEventMsg.value[id]?.includes('Captura detectada')) {
+        tarjetaEventMsg.value[id] = ''
+      }
+    }, 2000)
   } else {
     addLog(`🔻 CAPTURA en contenedor (sin tarjeta específica)`)
   }
 }
 
-// Manejador para seleccionar tarjeta (burbujeo normal)
 function seleccionarTarjeta(id) {
-  addLog(`click tarjeta ${id}`)
-  // Mostrar feedback adicional (opcional)
-  searchResultMsg.value = `🌻 Tarjeta ${id} seleccionada: más info en el registro`
+  addLog(`click tarjeta ${id} (burbujeo normal)`)
+  tarjetaEventMsg.value[id] = `✅ Evento: click en tarjeta (burbujeo normal)`
   setTimeout(() => {
-    if (searchResultMsg.value.includes('seleccionada'))
-      searchResultMsg.value = searchResultMsg.value.split('🌻')[0] || ''
+    if (tarjetaEventMsg.value[id] === `✅ Evento: click en tarjeta (burbujeo normal)`) {
+      tarjetaEventMsg.value[id] = ''
+    }
+  }, 3000)
+  searchResultMsg.value = `🌻 Tarjeta ${id} seleccionada`
+  setTimeout(() => {
+    if (searchResultMsg.value.includes('seleccionada')) searchResultMsg.value = ''
   }, 2000)
 }
 
 function marcarFavorito(id) {
-  addLog(`⭐ favorito ${id}`)
+  addLog(`⭐ favorito ${id} (stop propagation - no burbujea hacia la tarjeta)`)
+  tarjetaEventMsg.value[id] =
+    `⭐ Evento: favorito (stop propagation - el click no llegó a la tarjeta)`
+  setTimeout(() => {
+    if (tarjetaEventMsg.value[id]?.startsWith('⭐')) {
+      tarjetaEventMsg.value[id] = ''
+    }
+  }, 3000)
 }
 
-// --------------------- MÓDULO 3: ONCE (botón único) ---------------------
+// --------------------- MÓDULO 3: ONCE ---------------------
 function mostrarTips() {
   tipMostrado.value = true
   tipDisabled.value = true
@@ -242,13 +310,11 @@ function mostrarTips() {
   addLog('mostrar tips (una vez) - técnica agrícola revelada')
 }
 
-// --------------------- MÓDULO 4: SCROLL con .passive ---------------------
+// --------------------- MÓDULO 4: SCROLL ---------------------
 function onScroll(event) {
   const container = event.target
   const newPos = container.scrollTop
   scrollPosition.value = newPos
-
-  // Throttle para no saturar el log (máximo cada 300ms)
   const now = Date.now()
   if (now - lastScrollLogTime > 300) {
     addLog(`scroll: ${newPos}px`)
@@ -256,7 +322,7 @@ function onScroll(event) {
   }
 }
 
-// --------------------- MÓDULO 5: MODAL y enlace prevent ---------------------
+// --------------------- MÓDULO 5: MODAL ---------------------
 function abrirModalInfo() {
   modalVisible.value = true
   addLog('abrir modal (prevent en enlace)')
@@ -273,20 +339,212 @@ function limpiarRegistro() {
   addLog('registro limpiado manualmente')
 }
 
-// Pequeño ajuste extra: añadir evento de inicial para demostrar
+// --------------------- DEMOSTRACIÓN DE EVENTOS ---------------------
+function demoClickNormal() {
+  const msg = 'Evento @click normal (burbujeo)'
+  demoFeedback.value.normal = msg
+  addLog(msg)
+  setTimeout(() => {
+    if (demoFeedback.value.normal === msg) demoFeedback.value.normal = ''
+  }, 2000)
+}
+
+function demoClickStop() {
+  const msg = 'Evento @click.stop (propagación detenida)'
+  demoFeedback.value.stop = msg
+  addLog(msg)
+  setTimeout(() => {
+    if (demoFeedback.value.stop === msg) demoFeedback.value.stop = ''
+  }, 2000)
+}
+
+function demoClickPadre() {
+  addLog('Contenedor padre recibió el click (esto NO debería ocurrir con .stop)')
+}
+
+function demoCapture() {
+  const msg = 'Fase de CAPTURA: evento capturado antes de llegar al botón'
+  demoFeedback.value.capture = msg
+  addLog(msg)
+  setTimeout(() => {
+    if (demoFeedback.value.capture === msg) demoFeedback.value.capture = ''
+  }, 2000)
+}
+
+function demoOnce() {
+  if (!onceTriggered) {
+    const msg = 'Evento @click.once ejecutado (solo una vez)'
+    demoFeedback.value.once = msg
+    addLog(msg)
+    onceTriggered = true
+    setTimeout(() => {
+      if (demoFeedback.value.once === msg) demoFeedback.value.once = ''
+    }, 2000)
+  }
+}
+
+function demoPrevent() {
+  const msg = 'Evento @click.prevent - navegación cancelada'
+  demoFeedback.value.prevent = msg
+  addLog(msg)
+  setTimeout(() => {
+    if (demoFeedback.value.prevent === msg) demoFeedback.value.prevent = ''
+  }, 2000)
+}
+
+function demoEnter(event) {
+  const valor = event.target.value
+  const msg = `@keyup.enter: buscando "${valor}"`
+  demoFeedback.value.keyboard = msg
+  addLog(msg)
+  setTimeout(() => {
+    if (demoFeedback.value.keyboard === msg) demoFeedback.value.keyboard = ''
+  }, 2000)
+}
+
+function demoEsc(event) {
+  event.target.value = ''
+  const msg = '@keydown.esc: campo limpiado'
+  demoFeedback.value.keyboard = msg
+  addLog(msg)
+  setTimeout(() => {
+    if (demoFeedback.value.keyboard === msg) demoFeedback.value.keyboard = ''
+  }, 2000)
+}
+
+function demoScroll(event) {
+  const top = event.target.scrollTop
+  const msg = `@scroll.passive: posición ${top}px`
+  demoFeedback.value.scroll = msg
+  const now = Date.now()
+  if (now - lastScrollLogTime > 500) {
+    addLog(msg)
+    lastScrollLogTime = now
+  }
+  setTimeout(() => {
+    if (demoFeedback.value.scroll === msg) demoFeedback.value.scroll = ''
+  }, 1500)
+}
+
 onMounted(() => {
   addLog('✨ App iniciada - Bienvenido al centro de eventos')
 })
 </script>
 
 <style scoped>
-/* Estilos adicionales específicos para la captura en el contenedor */
-.capture-container {
-  position: relative;
+/* Estilos específicos para la sección de tarjeta única */
+.capture-wrapper {
+  background: #f9fbf4;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  border: 1px dashed #bdd4a3;
 }
-.tarjetas-grid {
-  position: relative;
+
+.tarjeta-unica {
+  width: 100%;
+  max-width: 100%;
 }
+
+.tarjeta-con-feedback {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.event-feedback {
+  background: #fef7e0;
+  border-radius: 1rem;
+  padding: 0.5rem 0.8rem;
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  text-align: center;
+  border-left: 4px solid #86bf6c;
+  min-height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-muted {
+  color: #8a9a78;
+  font-style: italic;
+}
+
+.capture-info {
+  font-size: 0.8rem;
+  margin-top: 1rem;
+  background: #eaf3e2;
+  padding: 6px 12px;
+  border-radius: 2rem;
+  text-align: center;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2rem;
+  margin-top: 1rem;
+}
+
+.demo-card {
+  background: #b5c9f3;
+  border: 1px solid #dce5ce;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.demo-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  color: #4c764c;
+}
+
+.demo-card button,
+.demo-card a,
+.demo-card input {
+  margin: 0.5rem 0;
+  width: 100%;
+}
+
+.demo-feedback {
+  background: #eef3e7;
+  border-radius: 0.8rem;
+  padding: 0.4rem;
+  font-size: 0.8rem;
+  text-align: center;
+  color: #2a5c2a;
+  min-height: 48px;
+  margin-top: 0.5rem;
+}
+
+.mini-scroll {
+  height: 80px;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  padding: 0.3rem;
+  font-size: 0.8rem;
+}
+
+.mini-content p {
+  margin: 0.2rem 0;
+}
+
+small {
+  font-size: 0.7rem;
+  color: #6b7c5e;
+  display: block;
+  margin-top: 0.4rem;
+}
+
+.tip-message {
+  margin-top: 0.5rem;
+  background: #fff0cf;
+  padding: 0.5rem;
+  border-radius: 1rem;
+}
+
 code {
   background: #e2e9da;
   padding: 2px 6px;
@@ -294,4 +552,3 @@ code {
   font-size: 0.8rem;
 }
 </style>
-

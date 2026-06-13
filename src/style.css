@@ -6,7 +6,7 @@
 
 body {
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
-  background: #f5f7f0;
+  background: hwb(77 68% 9%);
   color: #2d3e2b;
   padding: 1.5rem;
 }
@@ -25,13 +25,13 @@ h1 {
 }
 
 .sub {
-  color: #5a6e4a;
+  color: #2f461d;
   margin-bottom: 2rem;
   font-style: italic;
 }
 
 section {
-  background: white;
+  background: rgb(138, 187, 132);
   border-radius: 1rem;
   padding: 1.2rem;
   margin-bottom: 2rem;
@@ -42,8 +42,8 @@ section {
 h2 {
   font-size: 1.4rem;
   margin-bottom: 1rem;
-  color: #3c6e3c;
-  border-bottom: 2px solid #cfe3c0;
+  color: #1e60ee;
+  border-bottom: 2px solid #141414;
   padding-bottom: 0.4rem;
 }
 
@@ -57,7 +57,7 @@ h2 {
 input {
   flex: 2;
   padding: 0.6rem 1rem;
-  border: 1px solid #bfd9b0;
+  border: 1px solid #747cee;
   border-radius: 2rem;
   font-size: 1rem;
   background: #fefffa;
@@ -93,7 +93,7 @@ button:disabled {
 }
 
 .resultado-busqueda {
-  background: #eaf5e3;
+  background: #d0eb71;
   padding: 0.5rem 1rem;
   border-radius: 2rem;
   font-size: 0.9rem;
@@ -101,15 +101,8 @@ button:disabled {
   display: inline-block;
 }
 
-.tarjetas-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-top: 0.5rem;
-}
-
 .scroll-box {
-  background: #fef8e7;
+  background: #e7c76e;
   height: 200px;
   overflow: auto;
   padding: 1rem;
@@ -119,7 +112,7 @@ button:disabled {
 }
 
 .scroll-content p {
-  background: #fcf9f0;
+  background: #aeafe7;
   margin: 0.6rem 0;
   padding: 0.5rem;
   border-radius: 0.75rem;
@@ -170,10 +163,6 @@ button:disabled {
 
 .enlace-ejemplo:hover {
   color: #6fbf4c;
-}
-
-.tip-button {
-  background: #e68a2e;
 }
 
 .hint {
