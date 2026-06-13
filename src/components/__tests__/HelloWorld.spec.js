@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
 import { mount } from '@vue/test-utils'
-import HelloWorld from '../HelloWorld.vue'
+import HelloWorld from '../Tarjeta.vue/index.js'
 
 describe('HelloWorld', () => {
   it('renders properly', () => {
