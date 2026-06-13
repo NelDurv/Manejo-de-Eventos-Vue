@@ -1,50 +1,56 @@
 # Manejo EventosM6L4
+# Huerto El Alba - Centro de Eventos
 
-This template should help get you started developing with Vue 3 in Vite.
+¡Explora, haz clic, escribe y descubre cómo fluyen los eventos en Vue! 🌿
 
-## Recommended IDE Setup
+Aplicación educativa desarrollada con **Vue 3 Composition API** que demuestra el manejo de eventos DOM, modificadores de eventos y teclado, y la propagación de eventos (captura vs burbujeo). Temática de agricultura orgánica.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+##  Funcionalidades destacadas
 
-## Recommended Browser Setup
+- **Formulario de búsqueda**: uso de `@keyup.enter`, `@keydown.esc` y `@submit.prevent`.
+- **Tarjeta única interactiva**: demuestra `@click.capture` en el contenedor y `@click.stop` en el botón "Favorito".
+- **Panel "Etapas de eventos"**: siete tarjetas que ejemplifican `@click.normal`, `.stop`, `.capture`, `.once`, `.prevent`, teclas (`enter`/`esc`) y `.passive` en scroll.
+- **Botón de acción única**: `@click.once` para mostrar un tip agrícola que solo funciona una vez.
+- **Caja scrollable**: con `@scroll.passive` que muestra la posición en tiempo real.
+- **Enlace sin navegación**: `@click.prevent` que abre un modal informativo.
+- **Registro de eventos (audit log)**: lista en tiempo real los últimos 30 eventos, con botón para limpiar.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## 🛠️ Tecnologías
 
-## Customize configuration
+- Vue 3 (Composition API)
+- Vite
+- HTML5 / CSS3 (diseño responsive, degradados y estilos mínimos)
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## 📁 Estructura del proyecto
+src/
+├── App.vue # Componente principal
+├── main.js # Punto de entrada
+├── style.css # Estilos globales
+└── components/
+├── Tarjeta.vue # Tarjeta reutilizable con evento .stop
+└── Modal.vue # Modal informativo
 
-## Project Setup
+## ▶ GitHub
+      https://github.com/NelDurv/Manejo-de-Eventos-Vue
 
-```sh
+     https://github.com/NelDurv/Manejo-de-Eventos-Vue/commit/32123fd1ffd89d485b2810b4d9145426cd91e3b9
+
+
+## ▶️ Ejecución local
+
+```bash
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
-```
 
-### Compile and Minify for Production
+🎯 Objetivo educativo 
+Demostrar dominio de:
 
-```sh
-npm run build
-```
+Eventos DOM en Vue (en línea y mediante métodos).
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+Modificadores: .prevent, .stop, .once, .capture, .passive.
 
-```sh
-npm run test:unit
-```
+Modificadores de teclas: .enter, .esc, combinación .ctrl.k.
 
-### Lint with [ESLint](https://eslint.org/)
 
-```sh
-npm run lint
-```
+
+
